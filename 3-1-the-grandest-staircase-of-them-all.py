@@ -34,14 +34,23 @@
 #
 # Write a function called solution(n) that takes a positive integer n and returns the number of different staircases that can be built from exactly n bricks. n will always be at least 3 (so you can have a staircase at all), but no more than 200, because Commander Lambda's not made of money!
 
+cache = {}
+
 def solver(start, max):
+    global cache
     solutions = 0
 
     while start < max-start:
         # solutionPair = (start, max-start)
         solutions += 1
-        solutions += solver(start+1, max-start)
+        if (start, max) in cache:
+            sols = cache[(start, max)]
+        else:
+            sols = solver(start+1, max-start)
+            cache[(start, max)] = sols
+        solutions += sols
         start += 1
+
 
     return solutions
 
@@ -57,4 +66,5 @@ print(1, solution(3))
 print(1, solution(4))
 print(2, solution(5))
 print(3, solution(6))
+print(4, solution(7))
 print(487067745, solution(200))
