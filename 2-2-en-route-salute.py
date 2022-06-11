@@ -28,7 +28,7 @@ def solution(s):
     t = trim(s)
 
     salutes = 0
-    
+
     for i in range(len(t)):
         if t[i] == '>':
             for j in range(i+1, len(t)):
