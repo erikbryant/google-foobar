@@ -16,51 +16,49 @@
 # You need to know how many replication cycles (generations) it will take to generate the correct amount of bombs to destroy the LAMBCHOP. Write a function solution(M, F) where M and F are the number of Mach and Facula bombs needed. Return the fewest number of generations (as a string) that need to pass before you'll have the exact number of bombs necessary to destroy the LAMBCHOP, or the string "impossible" if this can't be done! M and F will be string representations of positive integers no larger than 10^50. For example, if M = "2" and F = "1", one generation would need to pass, so the solution would be "1". However, if M = "2" and F = "4", it would not be possible.
 
 
-def evolveDFS(m, f, M, F, generations, minGenerations):
-    if m == M and f == F:
-        return True, generations
-
-    if m > M or f > F:
-        return False, 0
-
-    if generations >= minGenerations:
-        return False, 0
-
-    generations += 1
-
-    possible = False
-
-    # For every Mach bomb, a Facula bomb is created
-    valid, g = evolveDFS(m, f+m, M, F, generations, minGenerations)
-    if valid:
-        possible = True
-        if g < minGenerations:
-            minGenerations = g
-
-    # For every Facula bomb, a Mach bomb is created
-    valid, g = evolveDFS(m+f, f, M, F, generations, minGenerations)
-    if valid:
-        possible = True
-        if g < minGenerations:
-            minGenerations = g
-
-    return possible, minGenerations
-
-
 def solution(M, F):
     m = 1
     f = 1
+    M = int(M)
+    F = int(F)
+    generation = 0
 
-    valid, generations = evolveDFS(m, f, int(M), int(F), 0, 99999999999999)
-    # valid, generations = evolveBFS(m, f, int(M), int(F), 0)
-    if not valid:
-        generations = 'impossible'
+    while M >= m and F >= f:
+        if m == M and f == F:
+            return str(generation)
 
-    return str(generations)
+        if M > F:
+            generation += M / F
+            M = M % F
+            if M < m:
+                M += F
+                generation -= 1
+        else:
+            generation += F / M
+            F = F % M
+            if F < f:
+                F += M
+                generation -= 1
 
+        if m == M and f == F:
+            return str(generation)
 
-print(0, solution('1', '1'))
-print(4, solution('4', '7'))
-print(1, solution('2', '1'))
-print(1, solution('1', '2'))
-print('impossible', solution('2', '4'))
+        if M > F:
+            M -= F
+        else:
+            F -= M
+        generation += 1
+
+    return 'impossible'
+
+def test():
+    print(0, solution('1', '1'))
+    print(4, solution('4', '7'))
+    print(1, solution('2', '1'))
+    print(1, solution('1', '2'))
+    print(98, solution('99', '1'))
+    print(999999, solution('1', '10000000'))
+    print(999999, solution('10000000', '1'))
+    print('impossible', solution('2', '4'))
+
+test()
