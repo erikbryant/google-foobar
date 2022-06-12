@@ -9,15 +9,18 @@
 #
 # For example, [1, 2, 3, 4, 5, 6] has the triples: [1, 2, 4], [1, 2, 6], [1, 3, 6], making the solution 3 total.
 
+# Algorithm speedup from:
+# https://stackoverflow.com/questions/39715457/any-faster-way-to-find-the-number-of-lucky-triples
+
 def solution(l):
     triples = 0
+    divides = [0] * len(l)
 
-    for i in range(len(l)-2):
-        for j in range(i+1, len(l)-1):
-            if l[j] % l[i] == 0:
-                for k in range(j+1, len(l)):
-                    if l[k] % l[j] == 0:
-                        triples += 1
+    for i in range(len(l)):
+        for j in range(i):
+            if l[i] % l[j] == 0:
+                divides[i] += 1
+                triples += divides[j]
 
     return triples
 
