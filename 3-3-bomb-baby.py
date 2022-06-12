@@ -52,6 +52,7 @@ def solution(M, F):
     f = 1
 
     valid, generations = evolveDFS(m, f, int(M), int(F), 0, 99999999999999)
+    # valid, generations = evolveBFS(m, f, int(M), int(F), 0)
     if not valid:
         generations = 'impossible'
 
@@ -62,3 +63,4 @@ print(0, solution('1', '1'))
 print(4, solution('4', '7'))
 print(1, solution('2', '1'))
 print(1, solution('1', '2'))
+print('impossible', solution('2', '4'))
